@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  mysql:
+    image: 'mysql/mysql-server:8.0.28'
+    ports:
+      - '${FORWARD_DB_PORT:-3306}:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_DATABASE: 'practice'
+      MYSQL_USER: 'practice'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+    volumes:
+      - 'sql-practice-mysql:/var/lib/mysql'
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
+      retries: 3
+      timeout: 5s
+volumes:
+  sql-practice-mysql:
+    driver: local
